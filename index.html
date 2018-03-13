@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>雷达图渲染</title>
+
+	<script type="text/javascript" src="echarts/echarts.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+</head>
+<body>
+<div id="jSur_radardata" style="width:65%;height:500px;"></div>
+
+<script type="text/javascript">
+     var myChart = echarts.init(document.getElementById('jSur_radardata'));  
+     radaroption = {
+              backgroundColor:'rgba(29,29,29,0.8)',
+              title: {
+                  text: '赛季数据'
+              },
+              radar: {
+                  name: {          
+                          color: '#949494',                        
+                  },
+                  nameGap:10,
+                  indicator: [
+                     { name: '战斗', max: 6500,color:'#cbcbcb'},
+                     { name: '生存', max: 16000,color:'#cbcbcb'},
+                     { name: '跑图', max: 30000,color:'#cbcbcb'},
+                     { name: '装备', max: 38000,color:'#cbcbcb'},
+                     { name: '治疗', max: 52000,color:'#cbcbcb'},
+                  ],                  
+                  axisLine:{
+                    lineStyle:{
+                       color:'rgba(29,29,29,0.5)'
+                    },
+                    symbolOffset:10
+                     
+                  },
+                  splitLine: {
+                       lineStyle: {
+                         color:'rgba(29,29,29,0.5)'
+                       }
+                   },
+                 splitArea:{
+                   areaStyle:{
+                     opacity:0
+                   }
+                 }
+              },
+              graphic: [
+                {
+                      type: 'image',
+                      id: 'logo',
+                      left: 'center',
+                      top: 'center',
+                      z: -1,        
+                      style: {
+                          image: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1520963323222&di=dc42a923913b80c8b1aeed6c9ad0aa30&imgtype=0&src=http%3A%2F%2Fimg3.duitang.com%2Fuploads%2Fblog%2F201510%2F19%2F20151019203534_QVLmc.thumb.700_0.jpeg',
+                          width: 90,
+                          height: 90,
+                          opacity: 0.8
+                      }
+                  }
+              ]
+              ,
+              series: [{
+                  type: 'radar',
+                  data : [
+                      {
+                          value : [4000,12000,25000,30000,45000]
+                          // value : getNewDatas(url,num) 动态数据
+                      }
+                  ],
+                   itemStyle: {
+                           borderColor:'#efa61e',
+
+                   },
+                   
+                   areaStyle: {
+                     color: 'rgba(239,166,30,0.5)'
+                   },
+                   lineStyle:{
+                     color:'#efa61e'
+                   }
+              }]
+          };
+
+
+
+      myChart.setOption(radaroption);
+
+       //点击切换
+      $('.tab-list').on('change', 'li', function(event) {
+        event.preventDefault();
+        var datanum = $(this).data('num');
+        getNewData(datanum);       
+      });
+      
+      function getNewData(url,num){
+        var newdata=new Array();
+        $.ajax({
+            url:url,
+            async:false,
+            type: "GET",
+            data: {
+              num:num
+            },
+            dataType: 'json',
+            success: function(data) {          
+              newdata=data.data;
+            }
+          })  
+          
+          return newdata;
+      }
+
+      //动态渲染
+</script>
+
+</body>
+</html>
